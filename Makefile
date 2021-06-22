@@ -1,4 +1,3 @@
-
 include Makefile.version
 
 envout:
@@ -6,11 +5,25 @@ envout:
 	@echo "BUILDARG_VERSION=$(BUILDARG_VERSION)"
 	@echo "IMAGENAME=$(IMAGENAME)"
 	@echo "BUILDARG_PLATFORM=$(BUILDARG_PLATFORM)"
-
+	@echo "NGRAM_DE=$(NGRAM_DE)"
+	@echo "NGRAM_EN=$(NGRAM_EN)"
+	@echo "FASTTEXTMODEL=$(FASTTEXTMODEL)"
 prepare:
-	sudo apt-get -qq -y install curl
-
+	sudo apt-get -qq -y install curl unzip
 build:
+	if test ! -d ngram; then mkdir ngram; fi
+	if test ! -f ngram/NGRAM_DE.zip; then curl -# -o ngram/NGRAM_DE.zip $(NGRAM_DE); fi
+	if test -d ngram/de; then rm -r ngram/de; fi
+	unzip -n ngram/NGRAM_DE.zip -d ngram/
+
+	if test ! -f ngram/NGRAM_EN.zip; then curl -# -o ngram/NGRAM_EN.zip $(NGRAM_EN); fi
+	if test -d ngram/en; then rm -r ngram/en; fi
+	unzip -n ngram/NGRAM_EN.zip -d ngram/
+
+	stzopsaf
+	
+	cd ..
+	curl -# -o lid.bin $(FASTTEXTMODEL)
 	docker buildx build $(BUILDARG_VERSION) $(BUILDARG_PLATFORM) -t $(IMAGENAME):latest .
 	docker buildx build $(BUILDARG_VERSION) --load -t $(IMAGENAME):latest .
 

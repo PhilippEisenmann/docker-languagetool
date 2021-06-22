@@ -1,0 +1,5 @@
+fasttextModel=/lid.bin
+fasttextBinary=fasttext
+languageModel=/ngram
+
+  
