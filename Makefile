@@ -13,18 +13,14 @@ prepare:
 build:
 	if test ! -d ngram; then mkdir ngram; fi
 	if test ! -f ngram/NGRAM_DE.zip; then curl -# -o ngram/NGRAM_DE.zip $(NGRAM_DE); fi
-	if test -d ngram/de; then rm -r ngram/de; fi
 	unzip -n ngram/NGRAM_DE.zip -d ngram/
 
 	if test ! -f ngram/NGRAM_EN.zip; then curl -# -o ngram/NGRAM_EN.zip $(NGRAM_EN); fi
-	if test -d ngram/en; then rm -r ngram/en; fi
 	unzip -n ngram/NGRAM_EN.zip -d ngram/
 
-	stzopsaf
+	if test ! -f lid.bin; then curl -# -o lid.bin $(FASTTEXTMODEL); fi
 	
-	cd ..
-	curl -# -o lid.bin $(FASTTEXTMODEL)
-	docker buildx build $(BUILDARG_VERSION) $(BUILDARG_PLATFORM) -t $(IMAGENAME):latest .
+	docker buildx build $(BUILDARG_VERSION) --build-arg NGRAM_DE=$(NGRAM_DE) --build-arg NGRAM_EN=$(NGRAM_EN)  --build-arg FASTTEXTMODEL=$(FASTTEXTMODEL) $(BUILDARG_PLATFORM) -t $(IMAGENAME):latest .
 	docker buildx build $(BUILDARG_VERSION) --load -t $(IMAGENAME):latest .
 
 test: test-cleanup.1
