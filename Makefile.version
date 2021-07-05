@@ -2,9 +2,9 @@ VERSION := 5.3
 BUILDARG_VERSION := --build-arg VERSION=$(VERSION)
 IMAGENAME := pei/docker-languagetool
 BUILDARG_PLATFORM := --platform linux/amd64
-NGRAM_DE_ORG := https://languagetool.org/download/ngram-data/ngrams-de-20150819.zip
-NGRAM_EN_ORG := https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip
-NGRAM_DE := http://localhost:5050/NGRAM_DE.zip
-NGRAM_EN := http://localhost:5050/NGRAM_EN.zip
-FASTTEXTMODEL:=https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
+NGRAM_URL_DE_ORG := https://languagetool.org/download/ngram-data/ngrams-de-20150819.zip
+NGRAM_URL_EN_ORG := https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip
+NGRAM_URL_DE := http://172.29.240.1:5050/NGRAM_DE.zip
+NGRAM_URL_EN := http://172.29.240.1:5050/NGRAM_EN.zip
+FASTTEXTMODEL_URL:=https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
 

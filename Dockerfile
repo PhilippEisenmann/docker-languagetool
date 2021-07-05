@@ -1,6 +1,9 @@
 FROM ubuntu:bionic
 # see Makefile.version
 ARG VERSION
+#ARG NGRAM_URL_DE
+#ARG NGRAM_URL_EN
+#ARG FASTTEXTMODEL_URL
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -25,21 +28,21 @@ RUN wget https://www.languagetool.org/download/LanguageTool-$VERSION.zip && \
     unzip LanguageTool-$VERSION.zip && \
     mv /LanguageTool-$VERSION /LanguageTool &&\
     rm LanguageTool-$VERSION.zip
-    
-RUN mkdir ngram &&\
-    curl -# -o ngram/NGRAM_DE.zip $(NGRAM_DE) && \
-    unzip -n ngram/NGRAM_DE.zip -d ngram/ && \
-    curl -# -o ngram/NGRAM_EN.zip $(NGRAM_EN) &&\
-    unzip -n ngram/NGRAM_EN.zip -d ngram/ && \
-    rm ngram/NGRAM_*.zip && \
-    curl -# -o lid.bin $(FASTTEXTMODEL)
 
-WORKDIR /LanguageTool-$VERSION
+#RUN mkdir ngram &&\
+#    curl -# -o ngram/NGRAM_DE.zip $NGRAM_URL_DE && \
+#    unzip -n ngram/NGRAM_DE.zip -d ngram/ && \
+#    curl -# -o ngram/NGRAM_EN.zip $NGRAM_URL_EN &&\
+#    unzip -n ngram/NGRAM_EN.zip -d ngram/ && \
+#    rm ngram/NGRAM_*.zip && \
+#    curl -# -o lid.bin $FASTTEXTMODEL_URL
 
-ADD misc/start.sh /start.sh
+WORKDIR /LanguageTool
 ADD misc/config.txt /LanguageTool/config.txt
 ADD lid.bin /lid.bin
-CMD [ "sh", "/start.sh" ]
+EXPOSE 8081
 USER nobody
-EXPOSE 8010
+CMD java -cp languagetool-server.jar  org.languagetool.server.HTTPServer --port 8081 --public --allow-origin '*' --config config.txt
+
+
 

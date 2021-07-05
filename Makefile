@@ -5,9 +5,9 @@ envout:
 	@echo "BUILDARG_VERSION=$(BUILDARG_VERSION)"
 	@echo "IMAGENAME=$(IMAGENAME)"
 	@echo "BUILDARG_PLATFORM=$(BUILDARG_PLATFORM)"
-	@echo "NGRAM_DE=$(NGRAM_DE)"
-	@echo "NGRAM_EN=$(NGRAM_EN)"
-	@echo "FASTTEXTMODEL=$(FASTTEXTMODEL)"
+	@echo "NGRAM_URL_DE=$(NGRAM_URL_DE)"
+	@echo "NGRAM_URL_EN=$(NGRAM_URL_EN)"
+	@echo "FASTTEXTMODEL_URL=$(FASTTEXTMODEL_URL)"
 prepare:
 	sudo apt-get -qq -y install curl unzip
 build:
@@ -20,7 +20,7 @@ build:
 
 	if test ! -f lid.bin; then curl -# -o lid.bin $(FASTTEXTMODEL); fi
 	
-	docker buildx build $(BUILDARG_VERSION) --build-arg NGRAM_DE=$(NGRAM_DE) --build-arg NGRAM_EN=$(NGRAM_EN)  --build-arg FASTTEXTMODEL=$(FASTTEXTMODEL) $(BUILDARG_PLATFORM) -t $(IMAGENAME):latest .
+	docker buildx build $(BUILDARG_VERSION) $(BUILDARG_PLATFORM) -t $(IMAGENAME):latest .
 	docker buildx build $(BUILDARG_VERSION) --load -t $(IMAGENAME):latest .
 
 test: test-cleanup.1
