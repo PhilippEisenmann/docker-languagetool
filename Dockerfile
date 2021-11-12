@@ -1,4 +1,5 @@
 FROM ubuntu:bionic
+#FROM openjdk:16-slim-buster
 # see Makefile.version
 ARG VERSION
 #ARG NGRAM_URL_DE
@@ -43,6 +44,3 @@ ADD lid.bin /lid.bin
 EXPOSE 8081
 USER nobody
 CMD java -cp languagetool-server.jar  org.languagetool.server.HTTPServer --port 8081 --public --allow-origin '*' --config config.txt
-
-
-
