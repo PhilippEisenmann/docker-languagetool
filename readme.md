@@ -1,4 +1,3 @@
-
 # Introduction
 
 [LanguageTool] is an Open Source proof­reading software for English, French,
@@ -34,6 +33,7 @@ docker run --name languagetool \
                         silviof/docker-languagetool:latest
 ```
 
+Route information can be found at https://languagetool.org/http-api/swagger-ui/#/default, an easy route to test that it's running is `/v2/languages`.
 ## ngram support
 
 To support [ngrams] you need an additional volume or directory mounted to the
@@ -54,5 +54,7 @@ Download English ngrams with the commands:
 
 One can use them using web browser plugin "Local server (localhost)" setting by running:
 
-    docker run -d --name languagetool -p 127.0.0.1:8081:8010 -v `pwd`/ngrams:/ngrams:ro --restart=unless-stopped silviof/docker-languagetool
- --mount type=bind,source="$(pwd)"/target,target=/app,readonly \
+    docker run -d --name languagetool -p 127.0.0.1:8081:8010 -v `pwd`/ngrams:/ngrams:ro --restart=unless-stopped silviof/docker-languagetool  --mount type=bind,source="$(pwd)"/target,target=/app,readonly \
+
+
+
