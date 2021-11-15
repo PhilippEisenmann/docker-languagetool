@@ -10,51 +10,32 @@ This is a Dockerfile to get the languagetools running on a system without java.
 [LanguageTool]: https://www.languagetool.org/
 [firefox-plugin]: https://addons.mozilla.org/firefox/addon/languagetoolfx/
 
-# Usage
+# Build and Usage
+to build the docker image run:
 
-The Server is running on port 8010, this port should exposed.
+    make build
 
-    $ docker pull silviof/docker-languagetool
-    [...]
-    $ docker run --rm -p 8010:8010 silviof/docker-languagetool
+If you would like to change the names see:
 
-Or you run it in background via `-d`-option.
-
-Run with no minimum rights and RAM
-```
-docker run --name languagetool \
-                        --cap-drop=ALL \
-                        --user=65534:65534 \
-                        --read-only \
-                        --mount type=bind,src=/tmp/languagetool/tmp,dst=/tmp \
-                        -p 127.0.0.1:8010:8010 \
-                        --memory 412m --memory-swap 500m \
-                        -e EXTRAOPTIONS="-Xmx382M" \
-                        silviof/docker-languagetool:latest
-```
-
-Route information can be found at https://languagetool.org/http-api/swagger-ui/#/default, an easy route to test that it's running is `/v2/languages`.
+    Makefile.version
 ## ngram support
 
-To support [ngrams] you need an additional volume or directory mounted to the
-`/ngrams` directory. For that add a `-v` to the `docker run`-command.
+ngram download and unzip is included in the docker make build.
+for testing you can change to a local server: 
 
-    docker run ... -v /path/to/ngrams:/ngrams ...
+    make local_server=1 <target>
 
-[ngrams]: http://wiki.languagetool.org/finding-errors-using-n-gram-data
+see also the 
+    
+    Makefile.version
 
+## show build settings
 
-Download English ngrams with the commands:
+    make envout
 
-    mkdir ngrams
-    wget https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip
-    (cd ngrams && unzip ../ngrams-en-20150817.zip)
-    rm -f ngrams-en-20150817.zip
+## switch NGRAM download server
 
+    make local_server=1 envout
 
-One can use them using web browser plugin "Local server (localhost)" setting by running:
-
-    docker run -d --name languagetool -p 127.0.0.1:8081:8010 -v `pwd`/ngrams:/ngrams:ro --restart=unless-stopped silviof/docker-languagetool  --mount type=bind,source="$(pwd)"/target,target=/app,readonly \
-
-
-
+## start
+docker compose up -d

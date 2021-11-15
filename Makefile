@@ -1,10 +1,18 @@
 include Makefile.version
 
+ifdef local_server
+	NGRAM_URL_DE=$(NGRAM_URL_DE_LOCAL)
+	NGRAM_URL_EN=$(NGRAM_URL_EN_LOCAL)
+else
+	NGRAM_URL_DE=$(NGRAM_URL_DE_ORG)
+	NGRAM_URL_EN=$(NGRAM_URL_EN_ORG)
+endif
+
 envout:
 	@echo "VERSION=$(VERSION)"
 	@echo "BUILDARG_VERSION=$(BUILDARG_VERSION)"
 	@echo "IMAGENAME=$(IMAGENAME)"
-	@echo "BUILDARG_PLATFORM=$(BUILDARG_PLATFORM)"
+	@echo "BUILDARG_PLATFORM=$(BUILDARG_PLATFORM)"	
 	@echo "NGRAM_URL_DE=$(NGRAM_URL_DE)"
 	@echo "NGRAM_URL_EN=$(NGRAM_URL_EN)"
 	@echo "FASTTEXTMODEL_URL=$(FASTTEXTMODEL_URL)"
@@ -12,13 +20,13 @@ prepare:
 	sudo apt-get -qq -y install curl unzip
 build:
 	if test ! -d ngram; then mkdir ngram; fi
-	if test ! -f ngram/NGRAM_DE.zip; then curl -# -o ngram/NGRAM_DE.zip $(NGRAM_DE); fi
+	if test ! -f ngram/NGRAM_DE.zip; then curl -# -o ngram/NGRAM_DE.zip $(NGRAM_URL_DE); fi
 	unzip -n ngram/NGRAM_DE.zip -d ngram/
 
-	if test ! -f ngram/NGRAM_EN.zip; then curl -# -o ngram/NGRAM_EN.zip $(NGRAM_EN); fi
+	if test ! -f ngram/NGRAM_EN.zip; then curl -# -o ngram/NGRAM_EN.zip $(NGRAM_URL_EN); fi
 	unzip -n ngram/NGRAM_EN.zip -d ngram/
 
-	if test ! -f lid.bin; then curl -# -o lid.bin $(FASTTEXTMODEL); fi
+	if test ! -f lid.bin; then curl -# -o lid.bin $(FASTTEXTMODEL_URL); fi
 	
 	docker buildx build $(BUILDARG_VERSION) $(BUILDARG_PLATFORM) -t $(IMAGENAME):latest .
 	docker buildx build $(BUILDARG_VERSION) --load -t $(IMAGENAME):latest .
