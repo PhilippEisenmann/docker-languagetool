@@ -10,6 +10,7 @@ endif
 
 envout:
 	@echo "VERSION=$(VERSION)"
+	@echo "UBUNTU_VERSION=$(UBUNTU_VERSION)"
 	@echo "BUILDARG_VERSION=$(BUILDARG_VERSION)"
 	@echo "IMAGENAME=$(IMAGENAME)"
 	@echo "BUILDARG_PLATFORM=$(BUILDARG_PLATFORM)"	
@@ -18,18 +19,17 @@ envout:
 	@echo "FASTTEXTMODEL_URL=$(FASTTEXTMODEL_URL)"
 prepare:
 	sudo apt-get -qq -y install curl unzip
-build:
+build_ngram:
 	if test ! -d ngram; then mkdir ngram; fi
 	if test ! -f ngram/NGRAM_DE.zip; then curl -# -o ngram/NGRAM_DE.zip $(NGRAM_URL_DE); fi
 	unzip -n ngram/NGRAM_DE.zip -d ngram/
 
 	if test ! -f ngram/NGRAM_EN.zip; then curl -# -o ngram/NGRAM_EN.zip $(NGRAM_URL_EN); fi
 	unzip -n ngram/NGRAM_EN.zip -d ngram/
-
+build_docker:
 	if test ! -f lid.bin; then curl -# -o lid.bin $(FASTTEXTMODEL_URL); fi
-	
-	docker buildx build $(BUILDARG_VERSION) $(BUILDARG_PLATFORM) -t $(IMAGENAME):latest .
-	docker buildx build $(BUILDARG_VERSION) --load -t $(IMAGENAME):latest .
+	docker buildx build $(BUILDARG_VERSION) $(UBUNTU_VERSION) $(BUILDARG_PLATFORM)  -t $(IMAGENAME):$(VERSION) .
+	docker buildx build $(BUILDARG_VERSION) $(UBUNTU_VERSION) --load -t $(IMAGENAME):$(VERSION) .
 
 test: test-cleanup.1
 test: TESTIPADDRESS=$(subst ",,$(shell docker inspect languagetool | jq '.[0].NetworkSettings.IPAddress'))
