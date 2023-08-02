@@ -2,8 +2,8 @@
 ARG UBUNTU_VERSION
 FROM ubuntu:${UBUNTU_VERSION}
 
-ARG LTVersion
-RUN echo $LTVersion
+ARG LT_VERSION
+RUN echo $LT_VERSION
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -24,10 +24,10 @@ RUN git clone https://github.com/facebookresearch/fastText.git /tmp/fastText && 
     cd / && \
     make
     
-RUN wget https://www.languagetool.org/download/LanguageTool-$LTVersion.zip && \
-    unzip LanguageTool-$LTVersion.zip && \
-    mv /LanguageTool-$LTVersion /LanguageTool &&\
-    rm LanguageTool-$LTVersion.zip
+RUN wget https://www.languagetool.org/download/LanguageTool-$LT_VERSION.zip && \
+    unzip LanguageTool-$LT_VERSION.zip && \
+    mv /LanguageTool-$LT_VERSION /LanguageTool &&\
+    rm LanguageTool-$LT_VERSION.zip
 
 WORKDIR /LanguageTool
 ADD misc/config.txt /LanguageTool/config.txt

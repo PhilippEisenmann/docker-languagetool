@@ -1,6 +1,6 @@
 VERSION := 6.2
-UBUNTU_VERSION := --build-arg UBUNTU_VERSION=latest
-BUILDARG_VERSION := --build-arg LTVersion=$(VERSION)
+UBUNTU_VERSION := latest
+LT_VERSION:= $(VERSION)
 IMAGENAME := pei/docker-languagetool
 BUILDARG_PLATFORM := --platform linux/amd64
 NGRAM_URL_DE_ORG := https://languagetool.org/download/ngram-data/ngrams-de-20150819.zip

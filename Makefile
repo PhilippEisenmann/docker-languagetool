@@ -11,7 +11,7 @@ endif
 envout:
 	@echo "VERSION=$(VERSION)"
 	@echo "UBUNTU_VERSION=$(UBUNTU_VERSION)"
-	@echo "BUILDARG_VERSION=$(BUILDARG_VERSION)"
+	@echo "LT_VERSION=$(LT_VERSION)"
 	@echo "IMAGENAME=$(IMAGENAME)"
 	@echo "BUILDARG_PLATFORM=$(BUILDARG_PLATFORM)"	
 	@echo "NGRAM_URL_DE=$(NGRAM_URL_DE)"
@@ -28,8 +28,8 @@ build_ngram:
 	unzip -n ngram/NGRAM_EN.zip -d ngram/
 build_docker:
 	if test ! -f lid.bin; then curl -# -o lid.bin $(FASTTEXTMODEL_URL); fi
-	docker buildx build $(BUILDARG_VERSION) $(UBUNTU_VERSION) $(BUILDARG_PLATFORM)  -t $(IMAGENAME):$(VERSION) .
-	docker buildx build $(BUILDARG_VERSION) $(UBUNTU_VERSION) --load -t $(IMAGENAME):$(VERSION) .
+	docker buildx build --build-arg LT_VERSION=$(LT_VERSION) --build-arg UBUNTU_VERSION=$(UBUNTU_VERSION) $(BUILDARG_PLATFORM)  -t $(IMAGENAME):$(VERSION) .
+	docker buildx build --build-arg LT_VERSION=$(LT_VERSION) --build-arg UBUNTU_VERSION=$(UBUNTU_VERSION) --load -t $(IMAGENAME):$(VERSION) .
 
 test: test-cleanup.1
 test: TESTIPADDRESS=$(subst ",,$(shell docker inspect languagetool | jq '.[0].NetworkSettings.IPAddress'))
