@@ -17,8 +17,6 @@ RUN apt-get update && apt-get install -y \
     openjdk-19-jdk
 
 RUN git clone https://github.com/facebookresearch/fastText.git /tmp/fastText && \
-#    rm -rf /tmp/fastText/.git* && \
-#    mv /tmp/fastText/* / && \
     cd /tmp/fastText && \
     make
 

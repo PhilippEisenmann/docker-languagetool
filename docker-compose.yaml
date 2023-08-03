@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    image: pei/docker-languagetool
+    image: pei/docker-languagetool:latest
     container_name: languagetool-server
     ports:
       - 8081:8081

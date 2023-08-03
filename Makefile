@@ -29,8 +29,8 @@ build_ngram:
 	unzip -n ngram/NGRAM_EN.zip -d ngram/
 build_docker:
 	if test ! -f lid.bin; then curl -# -o lid.bin $(FASTTEXTMODEL_URL); fi
-	docker buildx build --build-arg LT_VERSION=$(LT_VERSION) --build-arg UBUNTU_VERSION=$(UBUNTU_VERSION) --build-arg AMAZONCORRETTO_VERSION=${AMAZONCORRETTO_VERSION} $(BUILDARG_PLATFORM) -t $(IMAGENAME):$(VERSION) .
-	docker buildx build --build-arg LT_VERSION=$(LT_VERSION) --build-arg UBUNTU_VERSION=$(UBUNTU_VERSION) --build-arg AMAZONCORRETTO_VERSION=${AMAZONCORRETTO_VERSION} --load -t $(IMAGENAME):$(VERSION) .
+	docker buildx build --build-arg LT_VERSION=$(LT_VERSION) --build-arg UBUNTU_VERSION=$(UBUNTU_VERSION) --build-arg AMAZONCORRETTO_VERSION=${AMAZONCORRETTO_VERSION} $(BUILDARG_PLATFORM) -t $(IMAGENAME):$(VERSION) -t $(IMAGENAME):latest .
+	docker buildx build --build-arg LT_VERSION=$(LT_VERSION) --build-arg UBUNTU_VERSION=$(UBUNTU_VERSION) --build-arg AMAZONCORRETTO_VERSION=${AMAZONCORRETTO_VERSION} --load -t $(IMAGENAME):latest .
 
 test: test-cleanup.1
 test: TESTIPADDRESS=$(subst ",,$(shell docker inspect languagetool | jq '.[0].NetworkSettings.IPAddress'))
