@@ -1,5 +1,5 @@
-fasttextModel=/lid.bin
-fasttextBinary=/fasttext
+fasttextModel=/LanguageTool/lid.bin
+fasttextBinary=/LanguageTool/fasttext
 languageModel=/ngram
 
   

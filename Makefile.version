@@ -1,5 +1,6 @@
 VERSION := 6.2
 UBUNTU_VERSION := latest
+AMAZONCORRETTO_VERSION := latest
 LT_VERSION:= $(VERSION)
 IMAGENAME := pei/docker-languagetool
 BUILDARG_PLATFORM := --platform linux/amd64
